@@ -25,13 +25,16 @@
 		"sass-loader": "^8.0.2"
 	},
 	"dependencies": {
+		"axios": "^0.27.1",
 		"chart.js": "3.3.2",
 		"core-js": "^3.6.5",
+		"moment": "^2.29.3",
 		"primeflex": "^3.1.2",
 		"primeicons": "^5.0.0",
 		"primevue": "^3.12.2",
 		"prismjs": "1.9.0",
 		"vue": "3.2.9",
+		"vue-axios": "^3.4.1",
 		"vue-router": "^4.0.0-0"
 	}
 }
