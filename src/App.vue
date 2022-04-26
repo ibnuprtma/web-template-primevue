@@ -138,7 +138,7 @@ export default {
             }];
         },
         logo() {
-            return (this.$appState.darkTheme) ? "images/logo-white.svg" : "images/logo.svg";
+            return (this.$appState.darkTheme) ? "favicon.png" : "favicon.png";
         }
     },
     beforeUpdate() {
