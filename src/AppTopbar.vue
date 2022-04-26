@@ -2,7 +2,7 @@
 	<div class="layout-topbar">
 		<router-link to="/" class="layout-topbar-logo">
 			<img alt="Logo" :src="topbarImage()" />
-			<span>SAKAI</span>
+			<span>TUAS - WEB REPORT</span>
 		</router-link>
 		<button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle">
 			<i class="pi pi-bars"></i>
@@ -16,20 +16,8 @@
 		<ul class="layout-topbar-menu hidden lg:flex origin-top">
 			<li>
 				<button class="p-link layout-topbar-button">
-					<i class="pi pi-calendar"></i>
-					<span>Events</span>
-				</button>
-			</li>
-			<li>
-				<button class="p-link layout-topbar-button">
-					<i class="pi pi-cog"></i>
-					<span>Settings</span>
-				</button>
-			</li>
-			<li>
-				<button class="p-link layout-topbar-button">
-					<i class="pi pi-user"></i>
-					<span>Profile</span>
+					<i class="pi pi-sign-out"></i>
+					<span>Logout</span>
 				</button>
 			</li>
 		</ul>
@@ -46,7 +34,7 @@ export default {
             this.$emit('topbar-menu-toggle', event);
         },
 		topbarImage() {
-			return this.$appState.darkTheme ? 'images/logo-white.svg' : 'images/logo-dark.svg';
+			return this.$appState.darkTheme ?  'favicon.png' : 'favicon.png';
 		}
     },
 	computed: {
