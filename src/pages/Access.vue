@@ -12,7 +12,7 @@
                         </div>
                         <h1 class="text-900 font-bold text-4xl lg:text-5xl mb-2">Access Denied</h1>
                         <span class="text-600 text-center">You do not have the necesary permisions. Please contact admins.</span>
-                        <img src="layout/images/asset-access.svg" alt="Access denied" class="mt-5" width="80%">
+                        <img src="images/asset-access.svg" alt="Access denied" class="mt-5" width="80%">
                         <div class="col-12 mt-5 text-center">
                             <i class="pi pi-fw pi-arrow-left text-blue-500 mr-2" style="vertical-align:center;"></i>
                             <router-link to="/" class="text-blue-500">Go to Dashboard</router-link>

@@ -12,7 +12,7 @@
                         </div>
                         <h1 class="font-bold text-5xl text-900 mb-2">Error Occured</h1>
                         <span class="text-600">Requested resource is not available.</span>
-                        <img src="layout/images/asset-error.svg" alt="Error" class="mt-5" width="80%">
+                        <img src="images/asset-error.svg" alt="Error" class="mt-5" width="80%">
                         <div class="col-12 mt-5 text-center">
                             <i class="pi pi-fw pi-arrow-left text-blue-500 mr-2" style="vertical-align:center;"></i>
                             <router-link to="/" class="text-blue-500">Go to Dashboard</router-link>
