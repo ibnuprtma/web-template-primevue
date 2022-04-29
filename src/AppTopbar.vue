@@ -54,7 +54,6 @@ export default {
 
 		logout() {
 			this.sendLogoutRequest();
-			this.$router.push("/login");
     	},
 
         onMenuToggle(event) {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from '../router';
 
 export default {
   namespaced: true,
@@ -39,12 +40,13 @@ export default {
     },
     sendLogoutRequest({ commit }) {
 
-      commit("setUserData", null);
-      localStorage.removeItem("authToken");
-      // axios.post(process.env.VUE_APP_ROOT_API + "logout").then(() => {
-      //   commit("setUserData", null);
-      //   localStorage.removeItem("authToken");
-      // });
+      axios.post(process.env.VUE_APP_ROOT_API + "logout").then(() => {
+        commit("setUserData", null);
+        localStorage.removeItem("authToken");
+        router.push({
+          name: "login"
+        });
+      });
     },
   }
 };
