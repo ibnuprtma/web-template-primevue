@@ -55,17 +55,14 @@ const router = createRouter({
     routes,
 });
 
-
-const isAuthenticated = true;
-
 router.beforeEach((to, from, next) => {
-    if (to.name !== 'login' && !isAuthenticated) {
+    if (to.name !== 'login' && !localStorage.getItem("authToken")) {
       next({ name: 'login' });
-    }else if(to.name === 'login' && isAuthenticated){
+    }else if(to.name === 'login' && localStorage.getItem("authToken")){
         next({ name: 'dashboard' });
     }else {
       next();
     }
-  });
+});
 
 export default router;
