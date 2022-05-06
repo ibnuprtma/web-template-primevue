@@ -9,6 +9,7 @@ import { createApp, reactive } from 'vue';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 import router from './router';
+import store from "./store";
 import AppWrapper from './AppWrapper.vue';
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
@@ -105,13 +106,44 @@ router.beforeEach(function(to, from, next) {
 });
 
 const app = createApp(AppWrapper);
-
 app.config.globalProperties.$appState = reactive({ theme: 'tailwind-light', darkTheme: false });
+app.config.productionTip = false;
+
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 422) {
+      store.commit("setErrors", error.response.data.errors);
+    }
+    else if(error.response.status === 400){
+      store.commit("setErrors", error.response.data.data);
+    } 
+    else if (error.response.status === 401) {
+      store.commit("auth/setUserData", null);
+      localStorage.removeItem("authToken");
+      store.commit("setErrors", error.response.data.data);
+      router.push({ name: "Login" });
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
+
+axios.interceptors.request.use((config) => {
+  config.headers.common = {
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  };
+
+  return config;
+});
 
 app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' });
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(router);
+app.use(store);
 app.use(VueAxios, axios);
 
 app.directive('tooltip', Tooltip);
