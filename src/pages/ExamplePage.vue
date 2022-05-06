@@ -25,6 +25,7 @@
 
 					</template>
 					<template v-slot:end>
+                        <Button label="export" icon="pi pi-check" class="p-button-text" @click="download()" />
                         <a class="p-button p-button-success mr-2 inline-block" :href="this.urlExport" @click="generateUrlParamsExport()" target="_blank">
                             Export Excel
                         </a>
@@ -174,6 +175,33 @@ export default {
 
             this.urlExport = process.env.VUE_APP_ROOT_API + 'salesman/export/download?' +  this.getUrl(this.filterParams);
 
+        },
+        download(){
+            this.axios({
+                method: 'GET',
+                url: process.env.VUE_APP_ROOT_API + 'salesman/export-excel/download',
+            	responseType: 'blob',
+                params: {
+                    "salesman_code" : this.salesman_code,
+                    "period_label" : this.period_label,
+                }
+            })
+            .then(response => {
+                let fileUrl = window.URL.createObjectURL(response.data);
+                let fileLink = document.createElement('a');
+
+
+                console.log(fileUrl);
+
+                fileLink.href = fileUrl;
+                fileLink.setAttribute('download', 'import-excel-template.xls');
+                document.body.appendChild(fileLink)
+
+                fileLink.click();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         },
 		getDataTable(){
 			
