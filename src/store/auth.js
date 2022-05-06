@@ -23,7 +23,7 @@ export default {
       axios
         .get(process.env.VUE_APP_ROOT_API + "user")
         .then(response => {
-          commit("setUserData", response.data);
+          commit("setUserData", response.data.data.user);
         })
         .catch(() => {
           localStorage.removeItem("authToken");
