@@ -17,23 +17,10 @@
                             </div>
                         </div>
                     </div>
-                    <Button label="Filter" icon="pi pi-search" class="p-button-warning" :loading="loading" @click="getDataTable"></Button>
+                    <Button :loading="loading" label="Filter" icon="pi pi-search" class="p-button-warning" @click="getDataTable" />
+                    <Button :loading="loadingExcel" label="Export Excel" icon="pi pi-file-excel" class="p-button p-button-success mr-2 ml-2 inline-block" @click="exportExcelCSV('xlsx')" />
+                    <Button :loading="loadingCsv" label="Export CSV" icon="pi pi-file-excel" class="p-button p-button-success mr-2 inline-block" @click="exportExcelCSV('csv')" />
                 </Fieldset>
-
-				<Toolbar class="mb-4">
-					<template v-slot:start>
-
-					</template>
-					<template v-slot:end>
-                        <Button label="export" icon="pi pi-check" class="p-button-text" @click="download()" />
-                        <a class="p-button p-button-success mr-2 inline-block" :href="this.urlExport" @click="generateUrlParamsExport()" target="_blank">
-                            Export Excel
-                        </a>
-                        <a class="p-button p-button-success" :href="this.urlExport" @click="generateUrlParamsExport()" target="_blank">
-                            Export CSV
-                        </a>
-					</template>
-				</Toolbar>
 
                 <DataTable :value="dataTable" responsiveLayout="scroll" :loading="loading" dataKey="id" >
                     <template #header>
@@ -93,7 +80,7 @@
                 <Dialog v-model:visible="deleteItemDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
 					<div class="flex align-items-center justify-content-center">
 						<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-						<span v-if="item">Are you sure you want to delete</span>
+						<span v-if="item">Are you sure you want to delete this data {{item.name}}?</span>
 					</div>
 					<template #footer>
 						<Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
@@ -121,8 +108,12 @@ export default {
                 {text: 'YUSUF   (LECI NT)', id: 'NBB108'},
             ],
 
-            //datatables
+            // loading
             loading: false,
+            loadingExcel: false,
+            loadingCsv: false,
+
+            //datatables
             data: null,
             dataTable: null,
             rows: null,
@@ -130,14 +121,9 @@ export default {
             offset: null,
             totalItemsCount: 0,
 
-            //exports
-            filterParams:null,
-            urlExport: null,
-
             item: {},
 			editItemDialog: false,
 			deleteItemDialog: false,
-
 
 			submitted: false,
             
@@ -160,49 +146,38 @@ export default {
         },
     },
 	methods: {
-        getUrl(params) {
+        //EDIT
+		editItem(item) {
+			this.item = item;
+			this.editItemDialog = true;
+		},
+		hideDialog() {
+			this.editItemDialog = false;
+			this.submitted = false;
+		},
+		updateItem() {
+			this.submitted = true;
+            this.$toast.add({severity:'success', summary: 'Successful', detail: 'Data Updated', life: 3000});
+            this.editItemDialog = false;
+			this.submitted = false;
+            this.item = {};
+		},
+        //DELETE
+        confirmDeleteItem(item) {
+			this.item = item;
+			this.deleteItemDialog = true;
+		},
+        deleteItem() {
+			this.deleteItemDialog = false;
+			this.item = {};
 
-            const queryParams = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
-            return queryParams;
+            //success
+			// this.$toast.add({severity:'success', summary: 'Successful', detail: 'Data Deleted', life: 3000});
 
-        },
-        generateUrlParamsExport() {
-
-            this.filterParams= {
-                "salesman_code" : this.salesman_code,
-                "period_label" : this.period_label,
-            };
-
-            this.urlExport = process.env.VUE_APP_ROOT_API + 'salesman/export/download?' +  this.getUrl(this.filterParams);
-
-        },
-        download(){
-            this.axios({
-                method: 'GET',
-                url: process.env.VUE_APP_ROOT_API + 'salesman/export-excel/download',
-            	responseType: 'blob',
-                params: {
-                    "salesman_code" : this.salesman_code,
-                    "period_label" : this.period_label,
-                }
-            })
-            .then(response => {
-                let fileUrl = window.URL.createObjectURL(response.data);
-                let fileLink = document.createElement('a');
-
-
-                console.log(fileUrl);
-
-                fileLink.href = fileUrl;
-                fileLink.setAttribute('download', 'import-excel-template.xls');
-                document.body.appendChild(fileLink)
-
-                fileLink.click();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        },
+            //error
+			this.$toast.add({severity:'warn', summary: 'Error', detail: 'Something When Wrong', life: 3000});
+		},
+        // DATATABLE
 		getDataTable(){
 			
 			this.loading=true;
@@ -229,37 +204,54 @@ export default {
                 console.log(err);
             });
 		},
-        //edit
-		editItem(item) {
-			this.item = item;
-			this.editItemDialog = true;
-		},
-		hideDialog() {
-			this.editItemDialog = false;
-			this.submitted = false;
-		},
-		updateItem() {
-			this.submitted = true;
-            this.$toast.add({severity:'success', summary: 'Successful', detail: 'Data Updated', life: 3000});
-            this.editItemDialog = false;
-			this.submitted = false;
-            this.item = {};
-		},
-        //delete
-        confirmDeleteItem(item) {
-			this.item = item;
-			this.deleteItemDialog = true;
-		},
-        deleteItem() {
-			this.deleteItemDialog = false;
-			this.item = {};
+        // EXPORT
+        exportExcelCSV(ext){
 
-            //success
-			// this.$toast.add({severity:'success', summary: 'Successful', detail: 'Data Deleted', life: 3000});
+            if(ext == 'xlsx'){
+                this.loadingExcel=true;
+            }else if(ext == 'csv'){
+                this.loadingCsv=true;
+            }
 
-            //error
-			this.$toast.add({severity:'warn', summary: 'Error', detail: 'Something When Wrong', life: 3000});
-		},
+            this.axios({
+                method: 'GET',
+                url: process.env.VUE_APP_ROOT_API + 'salesman/export-excel/download',
+            	responseType: 'blob',
+                params: {
+                    "ext" : ext,
+                    "salesman_code" : this.salesman_code,
+                    "period_label" : this.period_label,
+                }
+            })
+            .then(response => {
+                let fileUrl = window.URL.createObjectURL(response.data);
+                let fileLink = document.createElement('a');
+
+                fileLink.href = fileUrl;
+
+                fileLink.setAttribute('download', 'Example Export.' + ext);
+                
+                document.body.appendChild(fileLink)
+
+                fileLink.click();
+               
+                if(ext == 'xlsx'){
+                    this.loadingExcel=false;
+                }else if(ext == 'csv'){
+                    this.loadingCsv=false;
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+               
+                if(ext == 'xlsx'){
+                    this.loadingExcel=false;
+                }else if(ext == 'csv'){
+                    this.loadingCsv=false;
+                }
+            });
+        },
 	}
 }
 </script>
