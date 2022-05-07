@@ -3,6 +3,24 @@
 		<div class="col-12">
 			<div class="card">
                 <Toast/>
+
+                <Fieldset legend="Add New" :toggleable="true" class="mb-3">
+                    <div class="p-fluid">
+                        <div class="formgrid grid">
+                            <div class="field col-12 md:col-6 lg:col-3">
+                                <label for="name">Name</label>
+                				<InputText id="name" v-model="forms.name" required="true" autofocus :class="{'p-invalid': submitted && !forms.name}" />
+						        <small class="p-invalid" v-if="submitted && !forms.name">Name is required.</small>
+                            </div>
+                            <div class="field col-12 md:col-6 lg:col-3">
+                                <label for="code">Salesman Code</label>
+                				<InputText id="code" v-model="forms.salesmanCode" required="true" autofocus :class="{'p-invalid': submitted && !forms.salesmanCode}" />
+						        <small class="p-invalid" v-if="submitted && !forms.salesmanCode">Salesman Code is required.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <Button :loading="loadingAddNew" label="Save" icon="pi pi-save" class="p-button-primary" @click="saveNew"/>
+                </Fieldset>
                 
                 <Fieldset legend="Filter" :toggleable="true" class="mb-3">
                     <div class="p-fluid">
@@ -73,7 +91,7 @@
 					</div>
 					<template #footer>
 						<Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-						<Button label="Save" icon="pi pi-check" class="p-button-text" @click="updateItem" />
+						<Button label="Save" icon="pi pi-check" class="p-button-text" @click="updateItem" :loading="loadingEdit"/>
 					</template>
 				</Dialog>
 
@@ -84,7 +102,7 @@
 					</div>
 					<template #footer>
 						<Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
-						<Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItem" />
+						<Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItem" :loading="loadingDelete"/>
 					</template>
 				</Dialog>
             </div>
@@ -98,20 +116,33 @@ import moment from 'moment';
 export default {
     data() {
         return {
-            period: new Date(),
+            // loading
+            loading: false,
+            loadingAddNew: false,
+            loadingEdit: false,
+            loadingDelete: false,
+            loadingExcel: false,
+            loadingCsv: false,
 
-            //salesmen_dropdown
+            // addNew
+            forms: {
+                name: null,
+                salesmanCode: null
+            },
+
+            //edit&delete
+            item: {},
+			editItemDialog: false,
+			deleteItemDialog: false,
+
+            // filter
+            period: new Date(),
             salesman_code: null,
             salesman: [
                 {text: 'DWI W (B1 LECI)', id: 'FBB105'},
                 {text: 'MOHAMAD BARLI  (BV2 LECI)', id: 'FBB205'},
                 {text: 'YUSUF   (LECI NT)', id: 'NBB108'},
             ],
-
-            // loading
-            loading: false,
-            loadingExcel: false,
-            loadingCsv: false,
 
             //datatables
             data: null,
@@ -121,12 +152,7 @@ export default {
             offset: null,
             totalItemsCount: 0,
 
-            item: {},
-			editItemDialog: false,
-			deleteItemDialog: false,
-
 			submitted: false,
-            
         }
     },
 	mounted() {
@@ -146,7 +172,18 @@ export default {
         },
     },
 	methods: {
-        //EDIT
+        // AddNew
+		saveNew() {
+			this.submitted = true;
+            this.$toast.add({severity:'success', summary: 'Successful', detail: 'Data Saved', life: 3000});
+			this.submitted = false;
+            this.clearForms();
+		},
+        clearForms() {
+            this.forms.name = null;
+            this.forms.salesmanCode = null;
+        },
+        // EDIT
 		editItem(item) {
 			this.item = item;
 			this.editItemDialog = true;
@@ -186,11 +223,11 @@ export default {
                 method: 'GET',
                 url: process.env.VUE_APP_ROOT_API + 'salesman',
                 params: {
-                    "salesman_code" : this.salesman_code,
-                    "period_label" : this.period_label,
                     "name" : this.search,
                     "per_page" : this.rows,
                     "page" : (this.offset/this.rows)+1,
+                    "salesman_code" : this.salesman_code,
+                    "period_label" : this.period_label,
                 }
             })
 			.then(res => {
