@@ -124,6 +124,7 @@ axios.interceptors.response.use(
       store.commit("setErrors", error.response.data.data);
       router.push({ name: "Login" });
     } else {
+      store.commit("setErrors", error.response.data.data);
       return Promise.reject(error);
     }
   }
