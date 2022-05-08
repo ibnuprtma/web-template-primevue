@@ -3,8 +3,50 @@
 		<div class="col-12">
 			<div class="card">
                 <Toast/>
+                <Message ref="message" severity="error" :closable="true" v-if="errors.length">{{errors}}</Message>
+                
+                <Fieldset legend="Upload" :toggleable="true" :collapsed="true" class="mb-3">
+                    <div class="p-fluid mb-3">       
+                        <div class="grid">
+                            <div class="lg:col-5 md:col-12 sm:col-12 align-items-center justify-content-center">
+                                <h5>Intruction</h5>
+                                <ol>
+                                    <li>
+                                        <p class="line-height-3 m-0">Intruction 1</p>
+                                    </li>
+                                    <li>
+                                        <p class="line-height-3 m-0">Intruction 2</p>
+                                    </li>
+                                    <li>
+                                        <p class="line-height-3 m-0">Intruction 3</p>
+                                    </li>
+                                    <li>
+                                        <p class="line-height-3 m-0">Intruction 4</p>
+                                    </li>
+                                </ol>
+                                <div class="line-height-3 m-0" style="color:red;">Note : follow the step by step instructions well. So the data will be uploaded</div>
+                            </div>
+                            
+                            <div class="lg:col-1">
+                                <Divider layout="vertical">
+                                    <!-- <b>OR</b> -->
+                                </Divider>
+                            </div>
 
-                <Fieldset legend="Add New" :toggleable="true" class="mb-3">
+                            <div class="sm:col-12 md:col-12 lg:col-6">
+                                <form>
+                                <FileUpload ref="fileUpload" name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" :customUpload="true" @uploader="onUpload" :fileLimit="1" :maxFileSize="1000000">
+                                  <template #empty>
+                                        <p>Drag and drop files to here to upload.</p>
+                                    </template>
+                                </FileUpload>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </Fieldset>
+
+                <Fieldset legend="Add New" :toggleable="true" :collapsed="true" class="mb-3">
                     <div class="p-fluid">
                         <div class="formgrid grid">
                             <div class="field col-12 md:col-6 lg:col-3">
@@ -22,7 +64,7 @@
                     <Button :loading="loadingAddNew" label="Save" icon="pi pi-save" class="p-button-primary" @click="saveNew"/>
                 </Fieldset>
                 
-                <Fieldset legend="Filter" :toggleable="true" class="mb-3">
+                <Fieldset legend="Filter" :toggleable="true" :collapsed="true" class="mb-3">
                     <div class="p-fluid">
                         <div class="formgrid grid">
                             <div class="field col-12 md:col-6 lg:col-3">
@@ -35,9 +77,9 @@
                             </div>
                         </div>
                     </div>
-                    <Button :loading="loading" label="Filter" icon="pi pi-search" class="p-button-warning" @click="getDataTable" />
-                    <Button :loading="loadingExcel" label="Export Excel" icon="pi pi-file-excel" class="p-button p-button-success mr-2 ml-2 inline-block" @click="exportExcelCSV('xlsx')" />
-                    <Button :loading="loadingCsv" label="Export CSV" icon="pi pi-file-excel" class="p-button p-button-success mr-2 inline-block" @click="exportExcelCSV('csv')" />
+                    <Button :loading="loading" label="Filter" icon="pi pi-search" class="p-button-warning mr-2 my-1" @click="getDataTable" />
+                    <Button :loading="loadingExcel" label="Export Excel" icon="pi pi-file-excel" class="p-button p-button-success mr-2 my-1 inline-block" @click="exportExcelCSV('xlsx')" />
+                    <Button :loading="loadingCsv" label="Export CSV" icon="pi pi-file-excel" class="p-button p-button-success mr-2 my-1 inline-block" @click="exportExcelCSV('csv')" />
                 </Fieldset>
 
                 <DataTable :value="dataTable" responsiveLayout="scroll" :loading="loading" dataKey="id" >
@@ -112,6 +154,7 @@
 
 <script>
 import moment from 'moment';
+import { mapGetters } from "vuex";
 
 export default {
     data() {
@@ -124,13 +167,16 @@ export default {
             loadingExcel: false,
             loadingCsv: false,
 
+            // upload
+            file: null,
+            
             // addNew
             forms: {
                 name: null,
                 salesmanCode: null
             },
 
-            //edit&delete
+            // edit&delete
             item: {},
 			editItemDialog: false,
 			deleteItemDialog: false,
@@ -157,6 +203,7 @@ export default {
     },
 	mounted() {
 		this.getDataTable();
+        this.$store.commit("setErrors", {});
 	},
     watch: {
         offset() {
@@ -167,16 +214,49 @@ export default {
         },
     },
     computed:{
+        ...mapGetters(["errors"]),
         period_label(){ 
             return moment(this.period, 'YYYY-MM').format('YYYY-MM'); 
         },
     },
 	methods: {
-        // AddNew
+        //UPLOAD
+        onUpload(event) {
+            this.file = event.files[0];
+
+            let data = new FormData();
+            data.append('file', this.file);
+
+            this.axios({
+                method: 'POST',
+                url: process.env.VUE_APP_ROOT_API + 'salesman/import',
+                data: data,
+                onUploadProgress: function (e) {
+                     this.$refs.fileUpload.progress = parseInt(Math.round((e.loaded * 100) / e.total));
+                }.bind(this)
+            })
+			.then(res => {
+                console.log(res);
+                this.$toast.add({severity:'success', summary: 'Successful', detail: 'Data Saved', life: 3000});
+                this.$store.commit("setErrors", {});
+                this.$refs.fileUpload.uploadedFileCount = 0;
+                this.$refs.fileUpload.progress = null;
+                this.getDataTable();
+			})
+            .catch((err) => {
+                console.log(err);
+                this.$refs.fileUpload.uploadedFileCount = 0;
+                this.$refs.fileUpload.progress = null;
+                this.$refs.message.visible = true;
+            });
+        },
+        // ADDNEW
 		saveNew() {
+            this.loadingAddNew = true;
 			this.submitted = true;
             this.$toast.add({severity:'success', summary: 'Successful', detail: 'Data Saved', life: 3000});
 			this.submitted = false;
+            this.loadingAddNew = false;
             this.clearForms();
 		},
         clearForms() {
@@ -199,7 +279,7 @@ export default {
 			this.submitted = false;
             this.item = {};
 		},
-        //DELETE
+        // DELETE
         confirmDeleteItem(item) {
 			this.item = item;
 			this.deleteItemDialog = true;
