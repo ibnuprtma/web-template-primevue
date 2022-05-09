@@ -88,7 +88,7 @@
                             <h5 class="m-0">Data</h5>
                             <span class="block mt-2 md:mt-0 p-input-icon-left">
                                 <i class="pi pi-search" />
-                                <InputText v-model="search" placeholder="Search..." @keyup.enter="getDataTable" />
+                                <InputText v-model="search" placeholder="Search..." @keyup="getDataTable" />
                             </span>
                         </div>
                     </template>
