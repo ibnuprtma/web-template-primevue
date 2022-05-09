@@ -332,7 +332,7 @@ export default {
 
             this.axios({
                 method: 'GET',
-                url: process.env.VUE_APP_ROOT_API + 'salesman/export-excel/download',
+                url: process.env.VUE_APP_ROOT_API + 'salesman/export-excel-csv/download',
             	responseType: 'blob',
                 params: {
                     "ext" : ext,
@@ -346,7 +346,7 @@ export default {
 
                 fileLink.href = fileUrl;
 
-                fileLink.setAttribute('download', 'Example Export.' + ext);
+                fileLink.setAttribute('download', 'Salesman Export.' + ext);
                 
                 document.body.appendChild(fileLink)
 
