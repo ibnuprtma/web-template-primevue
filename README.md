@@ -2,7 +2,7 @@
  
 ### Live Preview By SAKAI VUE Template
  
-Visit [Sakai Vue](https://www.primefaces.org/sakai-vue) website for a live preview. 
+If you want to see the template i used, Visit [Sakai Vue](https://www.primefaces.org/sakai-vue) website for a live preview. 
  
 ### Getting Started
 Sakai is an application template for Vue based on the [Vue CLI](https://cli.vuejs.org/) that provides out-of-the-box standard
