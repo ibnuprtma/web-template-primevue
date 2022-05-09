@@ -25,6 +25,13 @@ That is it, you may now start with the development of your application using the
 npm run serve
 ```
 
+Create a copy of your .env file
+
+```
+cp .env.example .env
+```
+This will create a copy of the .env.example file in your project and name the copy simply .env.
+
 ### Vue CLI Scripts
 Following commands are derived from create-app-app.
 ```
