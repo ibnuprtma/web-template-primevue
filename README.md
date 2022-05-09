@@ -1,6 +1,6 @@
-#  Sakai Admin Template for Vue  
+#  Web Report Template 
  
-### Live Preview
+### Live Preview By SAKAI VUE Template
  
 Visit [Sakai Vue](https://www.primefaces.org/sakai-vue) website for a live preview. 
  
