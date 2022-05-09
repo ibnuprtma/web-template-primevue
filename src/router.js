@@ -18,11 +18,6 @@ const routes = [
                 component: () => import('./components/EmptyPage.vue')
             },
             {
-                path: '/crud',
-                name: 'crud',
-                component: () => import('./pages/CrudDemo.vue')
-            },
-            {
                 path: '/example-page',
                 name: 'example-page',
                 component: () => import('./pages/ExamplePage.vue')
