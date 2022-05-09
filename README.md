@@ -18,19 +18,19 @@ or
 yarn
 ```
 
+Create a copy of your .env file
+This will create a copy of the .env.example file in your project and name the copy simply .env.
+
+```
+cp .env.example .env
+```
+
 Next step is running the application using the serve script and navigate to **http://localhost:8080/** to view the application.
 That is it, you may now start with the development of your application using the Sakai template.</p>
 
 ```
 npm run serve
 ```
-
-Create a copy of your .env file
-
-```
-cp .env.example .env
-```
-This will create a copy of the .env.example file in your project and name the copy simply .env.
 
 ### Vue CLI Scripts
 Following commands are derived from create-app-app.
