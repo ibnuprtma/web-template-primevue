@@ -9,4 +9,22 @@
 			</div>
 		</div>
 	</div>
+	<div class="grid">
+		<div class="col-6 col-offset-3">
+			<div class="card ">
+				<h5>Example Chart</h5>
+				<ExampleChart/>
+			</div>
+		</div>
+	</div>
 </template>
+
+<script>
+import ExampleChart from '../components/dashboard/ExampleChart.vue';
+
+export default {
+	components: {
+		'ExampleChart': ExampleChart,
+	}
+}
+</script>

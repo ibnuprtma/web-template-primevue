@@ -10,18 +10,18 @@ const routes = [
             {
                 path: '',
                 name: 'dashboard',
-                component: () => import('./components/Dashboard.vue')
+                component: () => import('./pages/Dashboard.vue')
+            },
+            {
+                path: '/example-page',
+                name: 'example-page',
+                component: () => import('./pages/ExamplePage.vue')
             },
             {
                 path: '/empty',
                 name: 'empty',
                 component: () => import('./components/EmptyPage.vue')
             },
-            {
-                path: '/example-page',
-                name: 'example-page',
-                component: () => import('./pages/ExamplePage.vue')
-            }
         ]
     },
     {
