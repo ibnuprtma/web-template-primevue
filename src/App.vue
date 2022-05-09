@@ -43,8 +43,8 @@ export default {
 				{
 					label: 'Example', icon: 'pi pi-fw pi-sitemap',
 					items: [
-						{label: 'Crud', icon: 'pi pi-fw pi-user-edit', to: '/crud'},
                         {label: 'Empty', icon: 'pi pi-fw pi-circle-off', to: '/empty'},
+						{label: 'Example Page', icon: 'pi pi-fw pi-user-edit', to: '/example-page'},
 					]
 				},
             ]
