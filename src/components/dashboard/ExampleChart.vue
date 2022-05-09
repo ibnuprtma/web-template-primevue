@@ -1,6 +1,7 @@
 <template>
     <Chart type="pie" :data="chartExample" :options="options"/>
     <Dialog :header="labelDialog" v-model:visible="display" :breakpoints="{'960px': '75vw', '640px': '100vw'}" :style="{width: '50vw'}" :modal="true">
+            <Message ref="message" severity="error" :closable="true" v-if="errors.length">{{errors}}</Message>
             <DataTable :value="dataTable" responsiveLayout="scroll" :loading="loading" dataKey="id" >
             <template #header>
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -41,6 +42,9 @@
 </template>
 
 <script>
+
+import { mapGetters } from "vuex";
+
 export default {
     data() {
         return {
@@ -85,6 +89,12 @@ export default {
 				}
             }
         }
+    },
+	mounted() {
+        this.$store.commit("setErrors", {});
+	},
+    computed:{
+        ...mapGetters(["errors"])
     },
     watch: {
         offset() {
