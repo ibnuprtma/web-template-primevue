@@ -18,7 +18,7 @@ or
 yarn
 ```
 
-Create a copy of your .env file
+Create a copy of your .env file.
 This will create a copy of the .env.example file in your project and name the copy simply .env.
 
 ```
