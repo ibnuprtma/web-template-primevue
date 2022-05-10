@@ -18,7 +18,7 @@
                         <p style="color: red;" v-if="errors.username">{{ errors.username[0] }}</p>
 
                         <label for="password" class="block text-900 font-medium text-xl mb-2">Password</label>
-                        <Password id="password" v-model="forms.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem" :class="{'p-invalid': errors.password}"></Password>
+                        <Password id="password" :feedback="false" v-model="forms.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem" :class="{'p-invalid': errors.password}"></Password>
                         <p style="color: red;" v-if="errors.password">{{ errors.password[0] }}</p>
                 
                         <Button label="Sign In" @click="login" class="w-full p-3 text-xl"></button>
