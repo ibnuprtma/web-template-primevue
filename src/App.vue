@@ -35,7 +35,7 @@ export default {
             mobileMenuActive: false,
             menu : [
                 {
-                    label: 'Home',
+                    label: 'Dashboard',
                     items: [{
                         label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/'
                     }]

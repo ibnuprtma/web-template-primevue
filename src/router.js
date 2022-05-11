@@ -13,14 +13,14 @@ const routes = [
                 component: () => import('./pages/Dashboard.vue')
             },
             {
+                path: '/empty',
+                name: 'empty',
+                component: () => import('./pages/EmptyPage.vue')
+            },
+            {
                 path: '/example-page',
                 name: 'example-page',
                 component: () => import('./pages/ExamplePage.vue')
-            },
-            {
-                path: '/empty',
-                name: 'empty',
-                component: () => import('./components/EmptyPage.vue')
             },
         ]
     },

@@ -12,12 +12,12 @@
                     </span>
                 </div>
             </template>
-            <Column field="name" header="Name">
+            <Column field="name" header="Nama">
                 <template #body="slotProps">
                     {{slotProps.data.name}}
                 </template>
             </Column>
-            <Column field="salesman_code" header="Salesman Code">
+            <Column field="salesman_code" header="Salesman Kode">
                 <template #body="slotProps">
                     {{slotProps.data.salesman_code}}
                 </template>
@@ -63,7 +63,7 @@ export default {
             totalItemsCount: 0,
 
             chartExample: {
-                labels: ['User Active','User Inactive'],
+                labels: ['User Aktif','User Tidak Aktif'],
                 datasets: [
                     {
                         data: [300, 50],

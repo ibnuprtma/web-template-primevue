@@ -8,8 +8,8 @@
                 <div class="h-full w-full m-0 py-7 px-4" style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
                     <div class="text-center mb-5">
                          <p style="color: red;" v-if="errors.error">Whoops! Something went wrong. <br> These credentials do not match our records.</p>
-                        <div class="text-900 text-3xl font-medium mb-3">Welcome</div>
-                        <span class="text-600 font-medium">Sign in to continue</span>
+                        <div class="text-900 text-3xl font-medium mb-3">Selamat Datang</div>
+                        <span class="text-600 font-medium">Silahkan login terlebih dahulu untuk melanjutkan</span>
                     </div>
                 
                     <div class="w-full md:w-10 mx-auto">
@@ -21,7 +21,7 @@
                         <Password id="password" :feedback="false" v-model="forms.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem" :class="{'p-invalid': errors.password}"></Password>
                         <p style="color: red;" v-if="errors.password">{{ errors.password[0] }}</p>
                 
-                        <Button label="Sign In" @click="login" class="w-full p-3 text-xl"></button>
+                        <Button label="Masuk" @click="login" class="w-full p-3 text-xl"></button>
                     </div>
                 </div>
             </div>
