@@ -82,7 +82,7 @@
                     <Button :loading="loadingCsv" label="Export CSV" icon="pi pi-file-excel" class="p-button p-button-success mr-2 my-1 inline-block" @click="exportExcelCSV('csv')" />
                 </Fieldset>
 
-                <DataTable :value="dataTable" responsiveLayout="scroll" :loading="loading" dataKey="id" >
+                <DataTable :value="dataTable" responsiveLayout="scroll" :loading="loading" dataKey="id" @sort="onSort($event)" >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                             <h5 class="m-0">Data</h5>
@@ -92,12 +92,12 @@
                             </span>
                         </div>
                     </template>
-                    <Column field="name" header="Nama">
+                    <Column field="name" header="Nama" :sortable="true">
                         <template #body="slotProps">
                             {{slotProps.data.name}}
                         </template>
                     </Column>
-                    <Column field="salesman_code" header="Salesman Kode">
+                    <Column field="salesman_code" header="Salesman Kode"  :sortable="true">
                         <template #body="slotProps">
                             {{slotProps.data.salesman_code}}
                         </template>
@@ -196,6 +196,8 @@ export default {
             rows: null,
             search: null,
             offset: null,
+            field: null,
+            sort: null,
             totalItemsCount: 0,
 
 			submitted: false,
@@ -306,6 +308,8 @@ export default {
                     "name" : this.search,
                     "per_page" : this.rows,
                     "page" : (this.offset/this.rows)+1,
+                    "field" : this.field,
+                    "sort" : this.sort,
                     "salesman_code" : this.salesman_code,
                     "period_label" : this.period_label,
                 }
@@ -321,6 +325,11 @@ export default {
                 console.log(err);
             });
 		},
+        onSort(event) {
+            this.field = event.sortField;
+            this.sort = event.sortOrder == '1' ? 'ASC' : 'DESC';
+            this.getDataTable();
+        },
         // EXPORT
         exportExcelCSV(ext){
 
