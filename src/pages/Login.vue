@@ -21,7 +21,7 @@
                         <Password id="password" :feedback="false" v-model="forms.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem" :class="{'p-invalid': errors.password}"></Password>
                         <p style="color: red;" v-if="errors.password">{{ errors.password[0] }}</p>
                 
-                        <Button label="Masuk" @click="login" class="w-full p-3 text-xl"></button>
+                        <Button label="Masuk" :loading="loading" @click="login" class="w-full p-3 text-xl"></Button>
                     </div>
                 </div>
             </div>
@@ -40,6 +40,7 @@ export default {
                 username: null,
                 password: null
             },
+            loading: false,
         }
     },
     mounted() {
@@ -52,9 +53,15 @@ export default {
         ...mapActions("auth", ["sendLoginRequest"]),
 
         login: function() {
-        this.sendLoginRequest(this.forms).then(() => {
-            this.$router.push({ name: "dashboard" });
-        });
+            this.loading = true;
+            this.sendLoginRequest(this.forms)
+                .then(() => {
+                    this.loading = false;
+                    this.$router.push({ name: "dashboard" });
+                })
+                .catch(() => {
+                    this.loading = false;
+                }).bind(this);
         }
     }
 }
