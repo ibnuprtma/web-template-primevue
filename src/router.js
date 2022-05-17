@@ -13,9 +13,9 @@ const routes = [
                 component: () => import('./pages/Dashboard.vue')
             },
             {
-                path: '/empty',
-                name: 'empty',
-                component: () => import('./pages/EmptyPage.vue')
+                path: '/salesman',
+                name: 'salesman',
+                component: () => import('./pages/Salesman.vue')
             },
             {
                 path: '/example-page',

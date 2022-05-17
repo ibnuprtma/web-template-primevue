@@ -41,10 +41,9 @@ export default {
                     }]
                 },
 				{
-					label: 'Example', icon: 'pi pi-fw pi-sitemap',
+					label: 'Master', icon: 'pi pi-fw pi-sitemap',
 					items: [
-                        {label: 'Empty', icon: 'pi pi-fw pi-circle-off', to: '/empty'},
-						{label: 'Example Page', icon: 'pi pi-fw pi-user-edit', to: '/example-page'},
+                        {label: 'Salesman', icon: 'pi pi-fw pi-user-edit', to: '/salesman'},
 					]
 				},
             ]
