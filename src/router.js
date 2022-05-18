@@ -15,7 +15,12 @@ const routes = [
             {
                 path: '/salesman',
                 name: 'salesman',
-                component: () => import('./pages/Salesman.vue')
+                component: () => import('./pages/master/Salesman.vue')
+            },
+            {
+                path: '/supervisor',
+                name: 'supervisor',
+                component: () => import('./pages/master/Supervisor.vue')
             },
             {
                 path: '/example-page',

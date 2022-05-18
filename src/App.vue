@@ -43,6 +43,7 @@ export default {
 				{
 					label: 'Master', icon: 'pi pi-fw pi-sitemap',
 					items: [
+                        {label: 'Supervisor', icon: 'pi pi-fw pi-user-edit', to: '/supervisor'},
                         {label: 'Salesman', icon: 'pi pi-fw pi-user-edit', to: '/salesman'},
 					]
 				},
