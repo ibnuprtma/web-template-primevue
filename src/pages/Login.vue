@@ -61,7 +61,7 @@ export default {
                 })
                 .catch(() => {
                     this.loading = false;
-                }).bind(this);
+                });
         }
     }
 }
