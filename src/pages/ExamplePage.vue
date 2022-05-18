@@ -78,14 +78,15 @@
                         </div>
                     </div>
                     <Button :loading="loading" label="Filter" icon="pi pi-search" class="p-button-warning mr-2 my-1" @click="getDataTable" />
-                    <Button :loading="loadingExcel" label="Export Excel" icon="pi pi-file-excel" class="p-button p-button-success mr-2 my-1 inline-block" @click="exportExcelCSV('xlsx')" />
-                    <Button :loading="loadingCsv" label="Export CSV" icon="pi pi-file-excel" class="p-button p-button-success mr-2 my-1 inline-block" @click="exportExcelCSV('csv')" />
                 </Fieldset>
 
                 <DataTable :value="dataTable" responsiveLayout="scroll" :loading="loading" dataKey="id" @sort="onSort($event)" >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                            <h5 class="m-0">Data</h5>
+                            <div>
+                                <Button :loading="loadingExcel" label="Export Excel" icon="pi pi-file-excel" class="p-button p-button-success mr-2 my-1 inline-block" @click="exportExcelCSV('xlsx')" />
+                                <Button :loading="loadingCsv" label="Export CSV" icon="pi pi-file-excel" class="p-button p-button-success mr-2 my-1 inline-block" @click="exportExcelCSV('csv')" />
+                            </div>
                             <span class="block mt-2 md:mt-0 p-input-icon-left">
                                 <i class="pi pi-search" />
                                 <InputText v-model="search" placeholder="Cari..." @keyup.enter="getDataTable" />
