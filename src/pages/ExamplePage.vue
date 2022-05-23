@@ -93,14 +93,19 @@
                             </span>
                         </div>
                     </template>
-                    <Column field="name" header="Nama" :sortable="true">
+                    <Column field="number" header="No." :style="{width:'20px'}" >
                         <template #body="slotProps">
-                            {{slotProps.data.name}}
+                        {{ slotProps.data.number }}
                         </template>
                     </Column>
                     <Column field="salesman_code" header="Salesman Kode"  :sortable="true">
                         <template #body="slotProps">
                             {{slotProps.data.salesman_code}}
+                        </template>
+                    </Column>
+                    <Column field="salesman_name" header="Nama">
+                        <template #body="slotProps">
+                            {{slotProps.data.salesman_name}}
                         </template>
                     </Column>
 					<Column headerStyle="min-width:10rem;">
@@ -129,7 +134,7 @@
 				<Dialog v-model:visible="editItemDialog" :style="{width: '450px'}" header="Data Detail" :modal="true" class="p-fluid">
 					<div class="field">
 						<label for="name">Nama</label>
-						<InputText id="name" v-model.trim="item.name" required="true" autofocus :class="{'p-invalid': submitted && !item.name}" />
+						<InputText id="name" v-model.trim="item.salesman_name" required="true" autofocus :class="{'p-invalid': submitted && !item.name}" />
 						<small class="p-invalid" v-if="submitted && !item.name">Name is required.</small>
 					</div>
 					<template #footer>
@@ -156,6 +161,7 @@
 <script>
 import moment from 'moment';
 import { mapGetters } from "vuex";
+import { numberingDatatable } from '../utils/helpers';
 
 export default {
     data() {
@@ -199,6 +205,7 @@ export default {
             offset: null,
             field: null,
             sort: null,
+            page: null,
             totalItemsCount: 0,
 
 			submitted: false,
@@ -301,14 +308,15 @@ export default {
 		getDataTable(){
 			
 			this.loading=true;
+            this.page = (this.offset / this.rows) + 1;
 
 			this.axios({
                 method: 'GET',
-                url: process.env.VUE_APP_ROOT_API + 'salesman',
+                url: process.env.VUE_APP_ROOT_API + 'web/salesman',
                 params: {
-                    "name" : this.search,
+                    "search" : this.search,
                     "per_page" : this.rows,
-                    "page" : (this.offset/this.rows)+1,
+                    "page" : this.page,
                     "field" : this.field,
                     "sort" : this.sort,
                     "salesman_code" : this.salesman_code,
@@ -317,7 +325,7 @@ export default {
             })
 			.then(res => {
 				this.data = res.data.data;
-				this.dataTable = res.data.data.data;
+				this.dataTable = numberingDatatable(res.data.data.data, this.page, this.rows);
                 this.totalItemsCount = res.data.data.total;
                 this.rows = parseInt(res.data.data.per_page);
 				this.loading=false;
@@ -342,7 +350,7 @@ export default {
 
             this.axios({
                 method: 'GET',
-                url: process.env.VUE_APP_ROOT_API + 'salesman/export-excel-csv/download',
+                url: process.env.VUE_APP_ROOT_API + 'web/salesman/export-excel-csv/download',
             	responseType: 'blob',
                 params: {
                     "ext" : ext,
