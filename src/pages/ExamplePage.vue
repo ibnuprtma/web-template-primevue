@@ -200,7 +200,7 @@ export default {
             //datatables
             data: null,
             dataTable: null,
-            rows: null,
+            rows: 10,
             search: null,
             offset: null,
             field: null,
