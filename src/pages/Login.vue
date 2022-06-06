@@ -14,11 +14,11 @@
                 
                     <div class="w-full md:w-10 mx-auto">
                         <label for="username" class="block text-900 text-xl font-medium mb-2">Username</label>
-                        <InputText id="username" required="true" v-model="forms.username" type="text" class="w-full mb-3" placeholder="Username" style="padding:1rem;" :class="{'p-invalid': errors.username}"/>
+                        <InputText id="username" required="true" v-model="forms.username" type="text" class="w-full mb-3" placeholder="Username" style="padding:1rem;" :class="{'p-invalid': errors.username}" @keyup.enter="login"/>
                         <p style="color: red;" v-if="errors.username">{{ errors.username[0] }}</p>
 
                         <label for="password" class="block text-900 font-medium text-xl mb-2">Password</label>
-                        <Password id="password" :feedback="false" v-model="forms.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem" :class="{'p-invalid': errors.password}"></Password>
+                        <Password id="password" :feedback="false" v-model="forms.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem" :class="{'p-invalid': errors.password}" @keyup.enter="login"></Password>
                         <p style="color: red;" v-if="errors.password">{{ errors.password[0] }}</p>
                 
                         <Button label="Masuk" :loading="loading" @click="login" class="w-full p-3 text-xl"></Button>
